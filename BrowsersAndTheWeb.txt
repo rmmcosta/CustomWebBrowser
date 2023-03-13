@@ -1,0 +1,7 @@
+The web is built on top of simple concepts:
+    - open
+    - decentralized
+    - safe computing
+    - a declarative document model for describing UIs
+    - hyperlinks
+    - the User Agent model

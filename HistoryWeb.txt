@@ -1,0 +1,4 @@
+Hypertext is text that is marked up with hyperlinks to other text. 
+Sounds familiar? A web page is hypertext, and links between web pages are hyperlinks. 
+The format for writing web pages is HTML, which is short for HyperText Markup Language. 
+The protocol for loading web pages is HTTP, which is short for HyperText Transport Protocol.

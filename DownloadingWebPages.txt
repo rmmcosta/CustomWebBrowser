@@ -1,0 +1,26 @@
+A web browser displays information identified by a URL. 
+    - And the first step is to use that URL to connect to and download that information from a server somewhere on the Internet.
+To display a web page, the browser first needs to get a copy of it. 
+1 - So, it asks the OS to put it in touch with a server somewhere on the internet; 
+    1 - the first part of the web page’s URL (before the first /) tells it the server’s host name. 
+    2 - The OS then talks to a DNS server which convertsOn some systems, you can run dig +short example.org to do this conversion yourself. 
+    3 - a host name like example.org into a destination IP address like 93.184.216.34.
+        Today there are two versions of IP: IPv4 and IPv6. IPv6 addresses are a lot longer and are usually in hex, but otherwise the differences don’t matter here. 
+    4 - Then the OS decides which hardware is best for communicating with that destination IP address (say, wireless or wired) using what is called a routing table, 
+    and then uses device drivers to send signals over a wire or over the air.I’m skipping steps here. 
+        On wires you first have to wrap communications in ethernet frames, on wireless you have to do even more. I’m trying to be brief. 
+        Those signals are picked up and transmitted by a series of routersOr a switch, or an access point, there are a lot of possibilities, 
+        but eventually there is a router. which each choose the best direction to send your message so that it eventually gets to the destination.
+        They may also record where the message came from so they can forward the reply back, especially in the case of NATs. 
+    5 - When the message reaches the server, a connection is created. 
+    Anyway, the point of this is that the browser tells the OS, “Hey, put me in touch with example.org”, and it does.
+
+On many systems, you can set up this kind of connection using the telnet program, like this:The “80” is the port, discussed below.
+
+telnet example.org 80
+
+A URL looks like this:
+
+http://example.org/index.html
+Scheme Hostname Path
+
