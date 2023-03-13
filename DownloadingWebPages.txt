@@ -24,3 +24,16 @@ A URL looks like this:
 http://example.org/index.html
 Scheme Hostname Path
 
+
+
+Encrypted connections
+
+So far, our browser supports the http scheme. That’s pretty good: it’s the most common scheme on the web today. 
+But more and more, websites are migrating to the https scheme. I’d like this toy browser to support https because many websites today require it.
+
+The difference between http and https is that https is more secure—but let’s be a little more specific. 
+The https scheme, or more formally HTTP over TLS, is identical to the normal http scheme, 
+except that all communication between the browser and the host is encrypted. 
+There are quite a few details to how this works: which encryption algorithms are used, 
+how a common encryption key is agreed to, and of course how to make sure that the browser is connecting to the correct host.
+
