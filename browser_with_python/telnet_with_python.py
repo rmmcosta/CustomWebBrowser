@@ -95,8 +95,8 @@ def request(url):
 def showBody(htmlDoc):
     bodyWithoutTags = ""
     is_tag_char = False
-    body = re.sub('<head>[\s\S]*</head>', '', htmlDoc)
-    for chr in body:
+    #body = re.sub('<head>[\s\S]*</head>', '', htmlDoc)
+    for chr in htmlDoc:
         if chr == '<':
             is_tag_char = True
         elif chr == '>':
