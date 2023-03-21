@@ -1,1 +1,0 @@
-C:\Users\rco\Documents\MyProjects\CustomWebBrowser\browser_with_rust\telnet_with_rust\target\debug\telnet_with_rust.exe: C:\Users\rco\Documents\MyProjects\CustomWebBrowser\browser_with_rust\telnet_with_rust\src\main.rs
