@@ -1,8 +1,11 @@
+use core::panic;
 use std::env;
+use std::fmt::Write as fmt_write;
+use std::io;
 use std::io::{prelude::*, Write};
 use std::net::TcpStream;
-use std::io;
-use std::fmt::Write as fmt_write;
+
+const HTTP_VERSION: &str = "1.0";
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
@@ -11,8 +14,11 @@ fn main() -> io::Result<()> {
     }
     let url = &args[1];
     // Print the HTML response to the console
-    let html:String;
-    match make_request(url) {
+    let host = get_host(url).expect("Error getting host");
+    let path = get_path(url).expect("Error getting path");
+    let port = get_port(url);
+    let html: String;
+    match make_request(host, path, port) {
         Ok(response) => {
             println!("{}", response);
             html = response;
@@ -26,12 +32,48 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn make_request(url: &String) -> io::Result<String> {
+fn get_host(url: &String) -> io::Result<String> {
+    let mut url_without_protocol = url.replace("http://", "");
+    url_without_protocol = url_without_protocol.replace("https://", "");
+    if !url_without_protocol.contains("/") {
+        return Ok(url_without_protocol);
+    } else {
+        let host = url_without_protocol.split("/").next().unwrap_or("");
+        return Ok(host.to_string());
+    }
+}
+
+fn get_port(url: &String) -> i16 {
+    if url.contains("https://") {
+        return 443;
+    } else if url.contains("http://") {
+        return 80;
+    } else {
+        panic!("Malformed url");
+    }
+}
+
+fn get_path(url: &String) -> io::Result<String> {
+    let mut url_without_protocol = url.replace("http://", "");
+    url_without_protocol = url_without_protocol.replace("https://", "");
+    if !url_without_protocol.contains("/") {
+        return Ok("/".to_string());
+    } else {
+        let path =
+            url_without_protocol.replace(url_without_protocol.split("/").next().unwrap_or(""), "");
+        return Ok(path);
+    }
+}
+
+fn make_request(host: String, path: String, port: i16) -> io::Result<String> {
     // Open a TCP connection to the server
-    if let Ok(mut stream) = TcpStream::connect(url) {
+    if let Ok(mut stream) = TcpStream::connect(format!("{}:{}", host, port)) {
         println!("Connected to the server!");
         // Send the HTTP GET request
-        let request = "GET / HTTP/1.0\r\nHost: example.com\r\n\r\n";
+        let request = format!(
+            "GET {} HTTP/{}\r\nHost: {}\r\n\r\n",
+            path, HTTP_VERSION, host
+        );
         stream.write_all(request.as_bytes())?;
 
         // Read the response from the server
@@ -57,9 +99,9 @@ fn extract_text_from_html(html: &String) -> String {
     let mut sb = String::new();
     let mut is_inside_tags = false;
     for c in html.chars() {
-        if c=='<' {
+        if c == '<' {
             is_inside_tags = true;
-        } else if c=='>' {
+        } else if c == '>' {
             is_inside_tags = false
         } else if !is_inside_tags {
             write!(&mut sb, "{}", c).unwrap();
