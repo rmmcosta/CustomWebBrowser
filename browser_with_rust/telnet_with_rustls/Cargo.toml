@@ -1,9 +1,12 @@
 [package]
-name = "telnet_with_rust"
+name = "telnet_with_rustls"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tcp-stream = "0.24.4"
+rustls = "0.20.8"
+webpki-roots = "0.22.6"
+webpki = "0.22.0"
+winapi = "0.3.9"

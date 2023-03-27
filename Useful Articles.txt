@@ -1,0 +1,7 @@
+https://stackoverflow.com/questions/7698488/turn-a-simple-socket-into-an-ssl-socket
+https://docs.rs/tcp-stream/latest/tcp_stream/
+
+C++
+
+https://www.codingninjas.com/codestudio/library/learning-socket-programming-in-c
+https://gist.github.com/sunmeat/0028bec3dca74548670b8f7c53643ee0

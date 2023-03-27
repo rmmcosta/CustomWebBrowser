@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with Windows SDK",
+            "type": "shell",
+            "command": "cargo build --target x86_64-pc-windows-msvc",
+            "options": {
+                "env": {
+                    "RUSTFLAGS": "/link /SUBSYSTEM:CONSOLE /entry:mainCRTStartup /LTCG /nodefaultlib:libcmt"
+                }
+            },
+            "problemMatcher": []
+        }
+    ]
+}

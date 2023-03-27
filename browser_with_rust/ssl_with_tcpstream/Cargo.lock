@@ -225,9 +225,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.54"
+version = "1.0.53"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e472a104799c74b514a57226160104aa483546de37e839ec50e3c2e41dd87534"
+checksum = "ba466839c78239c09faf015484e5cc04860f88242cff4d03eb038f04b4699b73"
 dependencies = [
  "unicode-ident",
 ]
@@ -370,6 +370,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
+name = "ssl_with_tcpstream"
+version = "0.1.0"
+dependencies = [
+ "tcp-stream",
+]
+
+[[package]]
 name = "subtle"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -396,13 +403,6 @@ dependencies = [
  "p12",
  "rustls-connector",
  "rustls-pemfile",
-]
-
-[[package]]
-name = "telnet_with_rust"
-version = "0.1.0"
-dependencies = [
- "tcp-stream",
 ]
 
 [[package]]

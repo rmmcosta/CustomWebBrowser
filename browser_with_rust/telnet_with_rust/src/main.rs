@@ -1,9 +1,8 @@
 use core::panic;
 use std::env;
 use std::fmt::Write as fmt_write;
-use std::io;
-use std::io::{prelude::*, Write};
-use std::net::TcpStream;
+use std::io::{self, Read, Write};
+use tcp_stream::{HandshakeError, TcpStream, TLSConfig};
 
 const HTTP_VERSION: &str = "1.0";
 
@@ -30,6 +29,29 @@ fn main() -> io::Result<()> {
         }
     }
     Ok(())
+}
+
+fn get_stream(host: &str, port: i16) -> TcpStream {
+    let mut stream = TcpStream::connect(format!("{}:{}", host, port)).unwrap();
+    stream.set_nonblocking(true).unwrap();
+
+    while !stream.is_connected() {
+        if stream.try_connect().unwrap() {
+            break;
+        }
+    }
+
+    if port == 443 {
+        let mut stream = stream.into_tls(host, TLSConfig::default());
+
+        while let Err(HandshakeError::WouldBlock(mid_handshake)) = stream {
+            stream = mid_handshake.handshake();
+        }
+
+        return stream.unwrap();
+    } else {
+        return stream;
+    }
 }
 
 fn get_host(url: &String) -> io::Result<String> {
@@ -67,32 +89,28 @@ fn get_path(url: &String) -> io::Result<String> {
 
 fn make_request(host: String, path: String, port: i16) -> io::Result<String> {
     // Open a TCP connection to the server
-    if let Ok(mut stream) = TcpStream::connect(format!("{}:{}", host, port)) {
-        println!("Connected to the server!");
-        // Send the HTTP GET request
-        let request = format!(
-            "GET {} HTTP/{}\r\nHost: {}\r\n\r\n",
-            path, HTTP_VERSION, host
-        );
-        stream.write_all(request.as_bytes())?;
+    let mut stream = get_stream(&host, port);
+    println!("Connected to the server!");
+    // Send the HTTP GET request
+    let request = format!(
+        "GET {} HTTP/{}\r\nHost: {}\r\n\r\n",
+        path, HTTP_VERSION, host
+    );
+    stream.write_all(request.as_bytes())?;
 
-        // Read the response from the server
-        let mut buffer = [0; 1024];
-        let mut response = String::new();
-        loop {
-            if let Ok(bytes_read) = stream.read(&mut buffer) {
-                if bytes_read == 0 {
-                    break;
-                }
-                response.push_str(std::str::from_utf8(&buffer[..bytes_read]).unwrap());
+    // Read the response from the server
+    let mut buffer = [0; 1024];
+    let mut response = String::new();
+    loop {
+        if let Ok(bytes_read) = stream.read(&mut buffer) {
+            if bytes_read == 0 {
+                break;
             }
+            response.push_str(std::str::from_utf8(&buffer[..bytes_read]).unwrap());
         }
-
-        // return the response
-        Ok(response)
-    } else {
-        return Ok("Couldn't connect to server...".to_string());
     }
+    // return the response
+    Ok(response)
 }
 
 fn extract_text_from_html(html: &String) -> String {

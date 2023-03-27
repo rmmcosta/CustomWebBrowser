@@ -1,5 +1,5 @@
 [package]
-name = "telnet_with_rust"
+name = "ssl_with_tcpstream"
 version = "0.1.0"
 edition = "2021"
 
