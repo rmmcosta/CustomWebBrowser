@@ -20,4 +20,4 @@ add_executable(telnet_with_cpp_windows ${SOURCES} ${HEADERS})
 ##mkdir build
 ##cd build
 ##cmake ..
-##make (only need in linux maybe)
+##make (only needed in linux maybe) on windows use cmake --build . instead

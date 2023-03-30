@@ -7,6 +7,7 @@ class StringBuilder {
 public:
     StringBuilder();
     void append(const std::string& str);
+    void append(char c);
     std::string str() const;
 private:
     std::string m_string;
