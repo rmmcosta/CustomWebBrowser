@@ -1,6 +1,5 @@
 import socket
 import zlib
-import re
 import ssl
 
 http_version = 1.0
@@ -23,7 +22,7 @@ def request(url):
 
     assert scheme == 'http' or scheme == 'https'
 
-    if ('/' in url):
+    if '/' in url:
         host, path = url.split('/', 1)
     else:
         host = url
@@ -68,12 +67,12 @@ def request(url):
 
     headers = {}
 
-    while (True):
-        currHeader = response.readline()
-        header, value = currHeader.split(":", 1)
+    while True:
+        current_header = response.readline()
+        header, value = current_header.split(":", 1)
         value = value.strip()
         headers[header.lower()] = value
-        if (header == 'Connection' and value == 'close'):
+        if header == 'Connection' and value == 'close':
             break
     # print(headers)
 
@@ -87,28 +86,28 @@ def request(url):
     body = response.read()
     s.close()
     # print(body)
-    if ('Content-Encoding' in headers and headers['Content-Encoding'] == 'gzip'):
+    if 'Content-Encoding' in headers and headers['Content-Encoding'] == 'gzip':
         body = zlib.decompress(body)  # .decode("utf8")
     return headers, body
 
 
-def showBody(htmlDoc):
-    bodyWithoutTags = ""
+def show_body(html_doc):
+    body_without_tags = ""
     is_tag_char = False
     #body = re.sub('<head>[\s\S]*</head>', '', htmlDoc)
-    for chr in htmlDoc:
-        if chr == '<':
+    for each_chr in html_doc:
+        if each_chr == '<':
             is_tag_char = True
-        elif chr == '>':
+        elif each_chr == '>':
             is_tag_char = False
         elif not is_tag_char:
-            bodyWithoutTags += chr
-    print(bodyWithoutTags.strip())
+            body_without_tags += each_chr
+    print(body_without_tags.strip())
 
 
 def load(url):
-    headers, htmlDoc = request(url)
-    showBody(htmlDoc)
+    headers, html_doc = request(url)
+    show_body(html_doc)
 
 
 if __name__ == "__main__":
